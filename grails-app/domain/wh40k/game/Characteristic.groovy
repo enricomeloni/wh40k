@@ -10,7 +10,7 @@ class Characteristic {
 	static belongsTo = [playingCharacter : PlayingCharacter]
 	
 	
-	
+	//tipo di caratteristica
 	CharacteristicType type
 	
 	
