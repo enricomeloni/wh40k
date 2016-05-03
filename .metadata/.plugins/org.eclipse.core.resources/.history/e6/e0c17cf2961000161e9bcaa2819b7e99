@@ -1,0 +1,113 @@
+package wh40k.game
+
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+@Transactional(readOnly = true)
+class CharacteristicController {
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+
+	def prova()
+	{
+		log.debug("prova")
+		render "${log}"
+	}
+	
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond Characteristic.list(params), model:[characteristicCount: Characteristic.count()]
+    }
+
+    def show(Characteristic characteristic) {
+        respond characteristic
+    }
+
+    def create() {
+        respond new Characteristic(params)
+    }
+
+    @Transactional
+    def save(Characteristic characteristic) {
+        if (characteristic == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (characteristic.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond characteristic.errors, view:'create'
+            return
+        }
+
+        characteristic.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'characteristic.label', default: 'Characteristic'), characteristic.id])
+                redirect characteristic
+            }
+            '*' { respond characteristic, [status: CREATED] }
+        }
+    }
+
+    def edit(Characteristic characteristic) {
+        respond characteristic
+    }
+
+    @Transactional
+    def update(Characteristic characteristic) {
+        if (characteristic == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (characteristic.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond characteristic.errors, view:'edit'
+            return
+        }
+
+        characteristic.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'characteristic.label', default: 'Characteristic'), characteristic.id])
+                redirect characteristic
+            }
+            '*'{ respond characteristic, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Characteristic characteristic) {
+
+        if (characteristic == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        characteristic.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'characteristic.label', default: 'Characteristic'), characteristic.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'characteristic.label', default: 'Characteristic'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
+        }
+    }
+}

@@ -1,0 +1,7 @@
+package wh40k.game
+
+class PlayingCharacter {
+
+    static constraints = {
+    }
+}

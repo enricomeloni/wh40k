@@ -1,0 +1,7 @@
+package wh40k
+
+class Characteristic {
+
+    static constraints = {
+    }
+}

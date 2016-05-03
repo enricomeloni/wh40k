@@ -1,0 +1,6 @@
+package wh40k
+
+class PlayingCharacterController {
+
+    def index() { }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="wh40k.game.PlayingCharacterControllerSpec" tests="7" skipped="0" failures="0" errors="0" timestamp="2016-05-03T17:20:37" hostname="EnricoPC" time="0.726">
+  <properties/>
+  <testcase name="Test the index action returns the correct model" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.518"/>
+  <testcase name="Test the create action returns the correct model" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.039"/>
+  <testcase name="Test the save action correctly persists an instance" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.048"/>
+  <testcase name="Test that the show action returns the correct model" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.01"/>
+  <testcase name="Test that the edit action returns the correct model" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.01"/>
+  <testcase name="Test the update action performs an update on a valid domain instance" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.055"/>
+  <testcase name="Test that the delete action deletes an instance if it exists" classname="wh40k.game.PlayingCharacterControllerSpec" time="0.046"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

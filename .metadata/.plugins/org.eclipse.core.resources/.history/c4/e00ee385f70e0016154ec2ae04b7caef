@@ -1,0 +1,116 @@
+package wh40k.game
+
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+@Transactional(readOnly = true)
+class PlayingCharacterController {
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	
+	def prova()
+	{
+		def p = PlayingCharacter.get(1)
+		
+		render "p = ${p.characteristics}"
+		
+		
+	}
+	
+    def index(Integer max) {
+        params.max = Math.min(max ?: 10, 100)
+        respond PlayingCharacter.list(params), model:[playingCharacterCount: PlayingCharacter.count()]
+    }
+
+    def show(PlayingCharacter playingCharacter) {
+        respond playingCharacter
+    }
+
+    def create() {
+        respond new PlayingCharacter(params)
+    }
+
+    @Transactional
+    def save(PlayingCharacter playingCharacter) {
+        if (playingCharacter == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (playingCharacter.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond playingCharacter.errors, view:'create'
+            return
+        }
+
+        playingCharacter.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'playingCharacter.label', default: 'PlayingCharacter'), playingCharacter.id])
+                redirect playingCharacter
+            }
+            '*' { respond playingCharacter, [status: CREATED] }
+        }
+    }
+
+    def edit(PlayingCharacter playingCharacter) {
+        respond playingCharacter
+    }
+
+    @Transactional
+    def update(PlayingCharacter playingCharacter) {
+        if (playingCharacter == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        if (playingCharacter.hasErrors()) {
+            transactionStatus.setRollbackOnly()
+            respond playingCharacter.errors, view:'edit'
+            return
+        }
+
+        playingCharacter.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'playingCharacter.label', default: 'PlayingCharacter'), playingCharacter.id])
+                redirect playingCharacter
+            }
+            '*'{ respond playingCharacter, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(PlayingCharacter playingCharacter) {
+
+        if (playingCharacter == null) {
+            transactionStatus.setRollbackOnly()
+            notFound()
+            return
+        }
+
+        playingCharacter.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'playingCharacter.label', default: 'PlayingCharacter'), playingCharacter.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'playingCharacter.label', default: 'PlayingCharacter'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
+        }
+    }
+}

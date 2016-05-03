@@ -1,0 +1,61 @@
+package wh40k.game
+
+import wh40k.enums.CharacteristicType
+
+class PlayingCharacter {
+
+    static constraints = {
+    }
+	
+	String firstName
+	String middleName
+	String lastName
+	
+	int experience
+
+	static hasMany = [characteristics : Characteristic]
+	
+	static transients = ['characteristicByType']
+	
+	private characteristicByType = [:]
+	
+	def rollCharacteristics()
+	{
+		for(type in CharacteristicType.values()) {
+
+			def value = Math.random()*100
+			value = Math.round(value)
+
+			def characteristic = new Characteristic(type:type, stat:value)
+
+			println("VAL: " + characteristic.type + " : " + characteristic.stat)
+			
+			println(characteristics)
+			
+			
+			characteristicByType[type] = characteristic;
+			
+			println("boh")
+			
+			characteristics.add(characteristic)
+			
+		}
+		
+		this.save(flush:true)
+	}
+	
+	def getCharacteristic(CharacteristicType type)
+	{
+		if(characteristicByType == [:])
+			loadCharacteristicByType()
+		characteristicByType[type]
+	}
+	
+	private def loadCharacteristicByType()
+	{
+		for(characteristic in characteristics)
+		{
+			characteristicByType[characteristic.type] = characteristic
+		}
+	}
+}

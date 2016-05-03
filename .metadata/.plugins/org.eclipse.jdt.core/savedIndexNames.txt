@@ -1,0 +1,1 @@
+INDEX VERSION 1.127+C:\Users\Enrico\Documents\Progetti\workspace_wh40k\.metadata\.plugins\org.eclipse.jdt.core

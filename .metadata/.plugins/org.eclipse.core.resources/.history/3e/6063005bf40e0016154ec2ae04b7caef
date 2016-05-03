@@ -1,0 +1,16 @@
+package wh40k.game
+
+class Characteristic {
+
+    static constraints = {
+    }
+	
+	CharacteristicType type
+	
+	//characteristic value, goes from 0 to 99
+	int stat
+
+	//characteristic modifier, can be negative
+	int modifier = 0
+	
+}
